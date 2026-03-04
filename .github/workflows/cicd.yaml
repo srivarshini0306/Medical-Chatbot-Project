@@ -8,6 +8,9 @@ on:
 jobs:
   Continuous-Integration:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
 
     steps:
       - name: Checkout
@@ -38,6 +41,9 @@ jobs:
   Continuous-Deployment:
     needs: Continuous-Integration
     runs-on: self-hosted
+    defaults:
+      run:
+        shell: bash
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -55,6 +61,9 @@ jobs:
 
       - name: Run Docker Image to serve users
         run: |
+         echo "Checking disk space before cleanup..."
+         df -h
+         docker system prune -f
          docker pull ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest
          docker stop medicalbot || true
          docker rm medicalbot || true
@@ -66,3 +75,5 @@ jobs:
            -e GROQ_API_KEY="${{ secrets.GROQ_API_KEY }}" \
            ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest
          docker image prune -f
+         echo "Checking disk space after deployment..."
+         df -h

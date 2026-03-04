@@ -192,3 +192,23 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+data/
+research/
+Medical_book.pdf
+
+.git
+.github
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.env
+data
+research
+*.ipynb
+*.pdf
+*.md
+tests
+.eggs
+*.egg-info
